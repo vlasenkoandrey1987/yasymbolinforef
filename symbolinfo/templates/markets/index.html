@@ -1,20 +1,23 @@
 {% extends 'base.html' %}
-{% block title %}Финансовые инструменты{% endblock %}
+{% block title %}
+    Финансовые инструменты
+{% endblock %}
+
 {% block content %}
   <h1>Финансовые инструменты</h1>
-  <article>
-    <p>SBER</p>
-    <ul>
-      <li>Рынок: <a href="{% url 'markets:market' 'TQBR' %}">TQBR</a></li>
-      <li>Лот: 10</li>
-    </ul>
-  </article>
-  <hr>
-  <article>
-    <p>SBRF</p>
-    <ul>
-      <li>Рынок: <a href="{% url 'markets:market' 'FUT' %}">FUT</a></li>
-      <li>Лот: 100</li>
-    </ul>
-  </article>
+  {% for symbol_info in symbol_infos %}
+    <article>
+      <p>{{ symbol_info.name }}</p>
+      <ul>
+        <li>
+          Рынок:
+          <a href="{% url 'markets:market' symbol_info.market.name %}">
+            {{ symbol_info.market.name }}
+          </a>
+        </li>
+        <li>Лот: {{ symbol_info.lot_size }}</li>
+      </ul>
+    </article>
+    {% if not forloop.last %}<hr>{% endif %}
+  {% endfor %}
 {% endblock %}

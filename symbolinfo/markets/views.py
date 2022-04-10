@@ -1,13 +1,25 @@
-from django.http import HttpResponse
-from django.template import loader
+from django.shortcuts import render, get_object_or_404
+
+from .models import Market, SymbolInfo
+
+SYMBOLS_PER_PAGE = 10
 
 
 def index(request):
-    template = loader.get_template('markets/index.html')
-    return HttpResponse(template.render({}, request))
+    template = 'markets/index.html'
+    symbol_infos = SymbolInfo.objects.order_by('name')[:SYMBOLS_PER_PAGE]
+    context = {
+        'symbol_infos': symbol_infos
+    }
+    return render(request, template, context)
 
 
 def market(request, name):
-    template = loader.get_template('markets/market.html')
-    context = {'name': name}
-    return HttpResponse(template.render(context, request))
+    template = 'markets/market.html'
+    market = get_object_or_404(Market, name=name)
+    symbol_infos = market.symbols.all().order_by('name')
+    context = {
+        'market': market,
+        'symbol_infos': symbol_infos
+    }
+    return render(request, template, context)
