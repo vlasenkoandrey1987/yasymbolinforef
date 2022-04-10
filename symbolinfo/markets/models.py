@@ -15,4 +15,4 @@ class SymbolInfo(models.Model):
         on_delete=models.CASCADE,
         related_name='symbols',
     )
-    lot_size = models.IntegerField
+    lot_size = models.IntegerField(default=1)
